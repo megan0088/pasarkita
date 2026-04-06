@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import { formatPrice, formatDate } from '@/lib/utils';
+import type { Order, OrderItem } from '@/types';
 
 const STATUS_LABEL: Record<string, string> = { pending:'Menunggu', paid:'Dibayar', processing:'Diproses', shipped:'Dikirim', delivered:'Selesai', cancelled:'Batal' };
 const STATUS_COLOR: Record<string, string> = { pending:'bg-yellow-50 text-yellow-700', paid:'bg-blue-50 text-blue-700', processing:'bg-indigo-50 text-indigo-700', shipped:'bg-purple-50 text-purple-700', delivered:'bg-green-50 text-green-700', cancelled:'bg-red-50 text-red-700' };
@@ -10,20 +11,28 @@ export default async function SellerOrdersPage() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect('/login');
 
-  // Get orders that contain this seller's products
+  // Get this seller's products first, then get order items for those products
+  const { data: sellerProducts } = await supabase
+    .from('products')
+    .select('id')
+    .eq('seller_id', user.id);
+
+  const productIds = (sellerProducts ?? []).map(p => p.id);
+
   const { data: orderItems } = await supabase
     .from('order_items')
     .select('*, order:orders(*, buyer:profiles(full_name, email)), product:products(name, image_urls)')
-    .eq('products.seller_id', user.id)
+    .in('product_id', productIds.length > 0 ? productIds : [''])
     .order('created_at', { ascending: false });
 
   // Group by order
-  const orderMap = new Map<string, any>();
+  type OrderWithItems = Order & { items: OrderItem[] };
+  const orderMap = new Map<string, OrderWithItems>();
   for (const item of orderItems ?? []) {
     if (!item.order) continue;
     const oid = item.order.id;
-    if (!orderMap.has(oid)) orderMap.set(oid, { ...item.order, items: [] });
-    orderMap.get(oid).items.push(item);
+    if (!orderMap.has(oid)) orderMap.set(oid, { ...item.order, items: [] } as OrderWithItems);
+    orderMap.get(oid)!.items.push(item as OrderItem);
   }
   const orders = Array.from(orderMap.values());
 
@@ -34,7 +43,7 @@ export default async function SellerOrdersPage() {
         <div className="text-center py-24 text-gray-400"><p>Belum ada pesanan masuk</p></div>
       ) : (
         <div className="space-y-4">
-          {orders.map((order: any) => (
+          {orders.map((order) => (
             <div key={order.id} className="bg-white rounded-2xl border border-gray-100 p-5">
               <div className="flex items-start justify-between mb-3">
                 <div>
@@ -46,7 +55,7 @@ export default async function SellerOrdersPage() {
                 </div>
               </div>
               <div className="space-y-1 mb-3">
-                {order.items.map((item: any) => (
+                {order.items.map((item) => (
                   <p key={item.id} className="text-sm text-gray-600">{item.product?.name} <span className="text-gray-400">x{item.quantity} · {formatPrice(item.total_price)}</span></p>
                 ))}
               </div>

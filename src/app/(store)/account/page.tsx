@@ -9,7 +9,9 @@ export default async function AccountPage() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect('/login');
 
-  const { data: profile } = await supabase.from('profiles').select('*').eq('id', user.id).single();
+  const { data: profile, error } = await supabase.from('profiles').select('*').eq('id', user.id).single();
+
+  if (error || !profile) redirect('/login');
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-8">

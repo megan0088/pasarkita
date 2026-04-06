@@ -64,8 +64,8 @@ export default function CheckoutPage() {
     const { clientSecret, error: stripeErr } = await res.json();
     if (stripeErr) { toast.error('Gagal memproses pembayaran'); setLoading(false); return; }
 
-    clearCart();
     router.push(`/checkout/payment?order=${order.id}&secret=${clientSecret}`);
+    clearCart();
   }
 
   if (items.length === 0) {
@@ -98,7 +98,7 @@ export default function CheckoutPage() {
                   <div key={f.name}>
                     <label className="block text-sm font-medium text-gray-700 mb-1.5">{f.label}</label>
                     <input name={f.name} type={f.type} placeholder={f.placeholder}
-                      value={(form as any)[f.name]} onChange={handleChange}
+                      value={form[f.name as keyof typeof form]} onChange={handleChange}
                       className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100 transition-all" />
                   </div>
                 ))}

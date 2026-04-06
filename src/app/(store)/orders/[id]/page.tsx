@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowLeft, Package } from 'lucide-react';
 import { formatPrice, formatDate } from '@/lib/utils';
+import type { ShippingAddress, OrderItem } from '@/types';
 
 const STATUS_STEPS = ['pending','paid','processing','shipped','delivered'];
 const STATUS_LABEL: Record<string, string> = { pending:'Menunggu Pembayaran', paid:'Dibayar', processing:'Sedang Diproses', shipped:'Dalam Pengiriman', delivered:'Selesai', cancelled:'Dibatalkan' };
@@ -24,7 +25,7 @@ export default async function OrderDetailPage({ params }: Props) {
   if (!order) notFound();
 
   const stepIndex = STATUS_STEPS.indexOf(order.status);
-  const addr = order.shipping_address as any;
+  const addr = order.shipping_address as ShippingAddress;
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-8">
@@ -55,7 +56,7 @@ export default async function OrderDetailPage({ params }: Props) {
       <div className="bg-white rounded-2xl border border-gray-100 p-5 mb-5">
         <h2 className="font-semibold text-gray-800 mb-4 text-sm">Produk ({order.items?.length})</h2>
         <div className="space-y-3">
-          {order.items?.map((item: any) => (
+          {order.items?.map((item: OrderItem) => (
             <div key={item.id} className="flex items-center gap-3">
               <div className="w-14 h-14 relative rounded-xl overflow-hidden bg-gray-50 border border-gray-100 shrink-0">
                 {item.product?.image_urls?.[0] ? <Image src={item.product.image_urls[0]} alt={item.product.name} fill className="object-cover" /> : <Package size={20} className="text-gray-300 m-auto" />}

@@ -3,8 +3,9 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
+import type { Profile } from '@/types';
 
-export default function AccountForm({ profile }: { profile: any }) {
+export default function AccountForm({ profile }: { profile: Profile }) {
   const router = useRouter();
   const [form, setForm] = useState({ full_name: profile?.full_name ?? '', phone: profile?.phone ?? '', address: profile?.address ?? '' });
   const [loading, setLoading] = useState(false);
@@ -38,7 +39,7 @@ export default function AccountForm({ profile }: { profile: any }) {
           <div key={f.name}>
             <label className="block text-sm font-medium text-gray-700 mb-1.5">{f.label}</label>
             <input type={f.type} placeholder={f.placeholder}
-              value={(form as any)[f.name]} onChange={e => setForm(fr => ({ ...fr, [f.name]: e.target.value }))}
+              value={form[f.name as keyof typeof form]} onChange={e => setForm(fr => ({ ...fr, [f.name]: e.target.value }))}
               className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100 transition-all" />
           </div>
         ))}

@@ -2,17 +2,18 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
-import { Plus, Trash2, Upload, X } from 'lucide-react';
+import { Upload, X } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import slugify from 'slugify';
+import type { Category, Product } from '@/types';
 
-interface Props { defaultValues?: any }
+interface Props { defaultValues?: Partial<Product> }
 
 export default function ProductForm({ defaultValues }: Props) {
   const router = useRouter();
   const isEdit = !!defaultValues;
   const [loading, setLoading] = useState(false);
-  const [categories, setCategories] = useState<any[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [form, setForm] = useState({
     name: defaultValues?.name ?? '',
     description: defaultValues?.description ?? '',
@@ -25,7 +26,10 @@ export default function ProductForm({ defaultValues }: Props) {
   });
 
   useEffect(() => {
-    createClient().from('categories').select('*').order('sort_order').then(({ data }) => setCategories(data ?? []));
+    createClient().from('categories').select('*').order('sort_order').then(({ data, error }) => {
+      if (error) { toast.error('Gagal memuat kategori'); return; }
+      setCategories(data ?? []);
+    });
   }, []);
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) {
@@ -108,7 +112,7 @@ export default function ProductForm({ defaultValues }: Props) {
         ].map(f => (
           <div key={f.name}>
             <label className="block text-xs font-medium text-gray-600 mb-1.5">{f.label}</label>
-            <input name={f.name} type={f.type} placeholder={f.placeholder} value={(form as any)[f.name]} onChange={handleChange}
+            <input name={f.name} type={f.type} placeholder={f.placeholder} value={form[f.name as keyof typeof form] as string} onChange={handleChange}
               className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100 transition-all" />
           </div>
         ))}
@@ -138,7 +142,7 @@ export default function ProductForm({ defaultValues }: Props) {
           ].map(f => (
             <div key={f.name} className={f.name === 'stock' ? 'col-span-2 sm:col-span-1' : ''}>
               <label className="block text-xs font-medium text-gray-600 mb-1.5">{f.label}</label>
-              <input name={f.name} type="number" min="0" placeholder={f.placeholder} value={(form as any)[f.name]} onChange={handleChange}
+              <input name={f.name} type="number" min="0" placeholder={f.placeholder} value={form[f.name as keyof typeof form] as string} onChange={handleChange}
                 className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100 transition-all" />
             </div>
           ))}
