@@ -72,7 +72,7 @@ export default function CheckoutPage() {
     return (
       <div className="max-w-3xl mx-auto px-4 py-24 text-center">
         <p className="text-gray-500 mb-4">Keranjang kamu kosong.</p>
-        <a href="/products" className="text-orange-500 font-medium hover:text-orange-600">Mulai belanja →</a>
+        <a href="/products" className="text-green-600 font-medium hover:text-green-700">Mulai belanja →</a>
       </div>
     );
   }
@@ -99,7 +99,7 @@ export default function CheckoutPage() {
                     <label className="block text-sm font-medium text-gray-700 mb-1.5">{f.label}</label>
                     <input name={f.name} type={f.type} placeholder={f.placeholder}
                       value={form[f.name as keyof typeof form]} onChange={handleChange}
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100 transition-all" />
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100 transition-all" />
                   </div>
                 ))}
               </div>
@@ -122,11 +122,11 @@ export default function CheckoutPage() {
                 <div className="flex justify-between text-gray-600"><span>Subtotal</span><span>{formatPrice(subtotal)}</span></div>
                 <div className="flex justify-between text-gray-600"><span>Ongkir</span><span>{formatPrice(SHIPPING_FEE)}</span></div>
                 <div className="flex justify-between font-bold text-base text-gray-900 pt-1 border-t border-gray-100">
-                  <span>Total</span><span className="text-orange-600">{formatPrice(total)}</span>
+                  <span>Total</span><span className="text-green-700">{formatPrice(total)}</span>
                 </div>
               </div>
               <button type="submit" disabled={loading}
-                className="mt-5 w-full flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 disabled:opacity-60 text-white font-semibold py-3 rounded-xl transition-colors text-sm">
+                className="mt-5 w-full flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 disabled:opacity-60 text-white font-semibold py-3 rounded-xl transition-colors text-sm">
                 {loading ? 'Memproses...' : <><ShieldCheck size={16} /> Lanjut ke Pembayaran <ArrowRight size={16} /></>}
               </button>
             </div>

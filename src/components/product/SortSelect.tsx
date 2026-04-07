@@ -18,7 +18,7 @@ export default function SortSelect({ defaultValue }: { defaultValue?: string }) 
       <select
         defaultValue={defaultValue ?? 'newest'}
         onChange={handleChange}
-        className="text-sm border border-gray-200 rounded-xl px-3 py-2 bg-white outline-none focus:border-orange-400"
+        className="text-sm border border-gray-200 rounded-xl px-3 py-2 bg-white outline-none focus:border-green-500"
       >
         <option value="newest">Terbaru</option>
         <option value="bestseller">Terlaris</option>

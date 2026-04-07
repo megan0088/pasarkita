@@ -25,23 +25,23 @@ export default function LoginPage() {
 
   return (
     <>
-      <h1 className="text-2xl font-bold text-gray-900 mb-1">Masuk ke PasarKita</h1>
-      <p className="text-gray-500 text-sm mb-6">Belum punya akun? <Link href="/register" className="text-orange-500 font-medium hover:text-orange-600">Daftar gratis</Link></p>
+      <h1 className="text-2xl font-bold text-gray-900 mb-1">Masuk ke C9titip</h1>
+      <p className="text-gray-500 text-sm mb-6">Belum punya akun? <Link href="/register" className="text-green-600 font-medium hover:text-green-700">Daftar gratis</Link></p>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1.5">Email</label>
           <input type="email" required value={email} onChange={e => setEmail(e.target.value)}
-            className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100 transition-all"
+            className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100 transition-all"
             placeholder="email@kamu.com" />
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1.5">Password</label>
           <input type="password" required value={password} onChange={e => setPassword(e.target.value)}
-            className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100 transition-all"
+            className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100 transition-all"
             placeholder="••••••••" />
         </div>
         <button type="submit" disabled={loading}
-          className="w-full py-3 bg-orange-500 hover:bg-orange-600 disabled:opacity-60 text-white font-semibold rounded-xl transition-colors text-sm">
+          className="w-full py-3 bg-green-600 hover:bg-green-700 disabled:opacity-60 text-white font-semibold rounded-xl transition-colors text-sm">
           {loading ? 'Memproses...' : 'Masuk'}
         </button>
       </form>

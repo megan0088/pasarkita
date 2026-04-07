@@ -20,7 +20,7 @@ export default async function SellerProductsPage() {
     <div className="p-6 max-w-6xl mx-auto">
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-2xl font-bold text-gray-900">Produk Saya</h1>
-        <Link href="/dashboard/products/new" className="flex items-center gap-2 px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-xl text-sm transition-colors">
+        <Link href="/dashboard/products/new" className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-xl text-sm transition-colors">
           <Plus size={16} /> Tambah Produk
         </Link>
       </div>
@@ -28,7 +28,7 @@ export default async function SellerProductsPage() {
         <div className="text-center py-24 flex flex-col items-center gap-4">
           <Package size={64} className="text-gray-200" />
           <p className="text-gray-500">Belum ada produk. Mulai jual sekarang!</p>
-          <Link href="/dashboard/products/new" className="px-5 py-2.5 bg-orange-500 text-white rounded-xl text-sm font-semibold">Tambah Produk</Link>
+          <Link href="/dashboard/products/new" className="px-5 py-2.5 bg-green-600 text-white rounded-xl text-sm font-semibold">Tambah Produk</Link>
         </div>
       ) : (
         <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
@@ -50,7 +50,7 @@ export default async function SellerProductsPage() {
                   <td className="px-4 py-3 text-gray-500">{p.category?.name ?? '—'}</td>
                   <td className="px-4 py-3 font-semibold text-gray-800">{formatPrice(p.price)}</td>
                   <td className="px-4 py-3">
-                    <span className={`font-semibold ${p.stock > 10 ? 'text-green-600' : p.stock > 0 ? 'text-orange-500' : 'text-red-500'}`}>{p.stock}</span>
+                    <span className={`font-semibold ${p.stock > 10 ? 'text-green-600' : p.stock > 0 ? 'text-green-600' : 'text-red-500'}`}>{p.stock}</span>
                   </td>
                   <td className="px-4 py-3 text-gray-500">{p.sold_count}</td>
                   <td className="px-4 py-3">
@@ -59,7 +59,7 @@ export default async function SellerProductsPage() {
                     </span>
                   </td>
                   <td className="px-4 py-3">
-                    <Link href={`/dashboard/products/${p.id}/edit`} className="p-1.5 rounded-lg hover:bg-orange-50 text-gray-400 hover:text-orange-500 transition-colors inline-flex">
+                    <Link href={`/dashboard/products/${p.id}/edit`} className="p-1.5 rounded-lg hover:bg-green-50 text-gray-400 hover:text-green-600 transition-colors inline-flex">
                       <Pencil size={15} />
                     </Link>
                   </td>

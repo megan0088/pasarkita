@@ -29,7 +29,7 @@ export default async function OrderDetailPage({ params }: Props) {
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-8">
-      <Link href="/orders" className="flex items-center gap-2 text-sm text-gray-500 hover:text-orange-500 mb-6 transition-colors"><ArrowLeft size={16} /> Kembali ke Pesanan</Link>
+      <Link href="/orders" className="flex items-center gap-2 text-sm text-gray-500 hover:text-green-600 mb-6 transition-colors"><ArrowLeft size={16} /> Kembali ke Pesanan</Link>
       <div className="flex items-start justify-between mb-6">
         <div><h1 className="text-xl font-bold text-gray-900">{order.order_number}</h1><p className="text-sm text-gray-400 mt-1">{formatDate(order.created_at)}</p></div>
       </div>
@@ -42,10 +42,10 @@ export default async function OrderDetailPage({ params }: Props) {
             {STATUS_STEPS.map((s, i) => (
               <div key={s} className="flex items-center flex-1">
                 <div className="flex flex-col items-center">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-colors ${i <= stepIndex ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-400'}`}>{i + 1}</div>
-                  <p className={`text-[10px] mt-1 text-center ${i <= stepIndex ? 'text-orange-600 font-medium' : 'text-gray-400'}`}>{STATUS_LABEL[s]?.split(' ')[0]}</p>
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-colors ${i <= stepIndex ? 'bg-green-600 text-white' : 'bg-gray-100 text-gray-400'}`}>{i + 1}</div>
+                  <p className={`text-[10px] mt-1 text-center ${i <= stepIndex ? 'text-green-700 font-medium' : 'text-gray-400'}`}>{STATUS_LABEL[s]?.split(' ')[0]}</p>
                 </div>
-                {i < STATUS_STEPS.length - 1 && <div className={`flex-1 h-0.5 mx-1 mb-4 ${i < stepIndex ? 'bg-orange-500' : 'bg-gray-100'}`} />}
+                {i < STATUS_STEPS.length - 1 && <div className={`flex-1 h-0.5 mx-1 mb-4 ${i < stepIndex ? 'bg-green-600' : 'bg-gray-100'}`} />}
               </div>
             ))}
           </div>
@@ -72,7 +72,7 @@ export default async function OrderDetailPage({ params }: Props) {
         <div className="border-t border-gray-50 mt-4 pt-3 space-y-1.5 text-sm">
           <div className="flex justify-between text-gray-500"><span>Subtotal</span><span>{formatPrice(order.subtotal)}</span></div>
           <div className="flex justify-between text-gray-500"><span>Ongkir</span><span>{formatPrice(order.shipping_fee)}</span></div>
-          <div className="flex justify-between font-bold text-gray-900 text-base pt-1 border-t border-gray-100"><span>Total</span><span className="text-orange-600">{formatPrice(order.total)}</span></div>
+          <div className="flex justify-between font-bold text-gray-900 text-base pt-1 border-t border-gray-100"><span>Total</span><span className="text-green-700">{formatPrice(order.total)}</span></div>
         </div>
       </div>
 

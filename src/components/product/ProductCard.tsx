@@ -25,7 +25,7 @@ export default function ProductCard({ product }: { product: Product }) {
 
   return (
     <Link href={`/products/${product.slug}`} className="group block">
-      <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-md hover:border-orange-200 transition-all duration-200">
+      <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-md hover:border-green-200 transition-all duration-200">
         {/* Image */}
         <div className="relative aspect-square bg-gray-50 overflow-hidden">
           {product.image_urls[0] ? (
@@ -75,7 +75,7 @@ export default function ProductCard({ product }: { product: Product }) {
             <button
               onClick={handleAddToCart}
               disabled={product.stock === 0}
-              className="p-1.5 rounded-lg bg-orange-50 hover:bg-orange-500 hover:text-white text-orange-500 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              className="p-1.5 rounded-lg bg-green-50 hover:bg-green-600 hover:text-white text-green-600 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
             >
               <ShoppingCart size={14} />
             </button>

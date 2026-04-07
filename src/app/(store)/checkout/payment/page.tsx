@@ -19,7 +19,7 @@ function PaymentContent() {
 
   if (status === 'processing') return (
     <div className="flex flex-col items-center gap-4 py-24">
-      <Loader2 size={48} className="text-orange-500 animate-spin" />
+      <Loader2 size={48} className="text-green-600 animate-spin" />
       <p className="text-gray-600 font-medium">Memproses pembayaran...</p>
     </div>
   );
@@ -30,7 +30,7 @@ function PaymentContent() {
       <h1 className="text-2xl font-bold text-gray-900">Pembayaran Berhasil!</h1>
       <p className="text-gray-500">Pesanan #{orderId?.slice(-8).toUpperCase()} sedang diproses.</p>
       <div className="flex gap-3 mt-2">
-        <Link href="/orders" className="px-5 py-2.5 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-xl text-sm transition-colors">Lihat Pesanan</Link>
+        <Link href="/orders" className="px-5 py-2.5 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-xl text-sm transition-colors">Lihat Pesanan</Link>
         <Link href="/products" className="px-5 py-2.5 border border-gray-200 text-gray-600 font-semibold rounded-xl text-sm hover:bg-gray-50 transition-colors">Belanja Lagi</Link>
       </div>
     </div>
@@ -41,7 +41,7 @@ function PaymentContent() {
       <XCircle size={64} className="text-red-500" />
       <h1 className="text-2xl font-bold text-gray-900">Pembayaran Gagal</h1>
       <p className="text-gray-500">Silakan coba lagi.</p>
-      <Link href="/cart" className="px-5 py-2.5 bg-orange-500 text-white font-semibold rounded-xl text-sm">Kembali ke Keranjang</Link>
+      <Link href="/cart" className="px-5 py-2.5 bg-green-600 text-white font-semibold rounded-xl text-sm">Kembali ke Keranjang</Link>
     </div>
   );
 }

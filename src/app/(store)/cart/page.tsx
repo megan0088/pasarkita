@@ -20,7 +20,7 @@ export default function CartPage() {
         <h2 className="text-xl font-bold text-gray-800">Keranjang Kosong</h2>
         <p className="text-gray-500">Yuk, temukan produk yang kamu suka!</p>
         <Link href="/products"
-          className="mt-2 flex items-center gap-2 px-6 py-3 bg-orange-500 text-white font-semibold rounded-xl hover:bg-orange-600 transition-colors">
+          className="mt-2 flex items-center gap-2 px-6 py-3 bg-green-600 text-white font-semibold rounded-xl hover:bg-green-700 transition-colors">
           Mulai Belanja <ArrowRight size={16} />
         </Link>
       </div>
@@ -48,7 +48,7 @@ export default function CartPage() {
 
               <div className="flex-1 min-w-0">
                 <p className="font-medium text-gray-900 line-clamp-2 text-sm">{product.name}</p>
-                <p className="text-orange-600 font-bold mt-1">{formatPrice(product.price)}</p>
+                <p className="text-green-700 font-bold mt-1">{formatPrice(product.price)}</p>
 
                 <div className="flex items-center justify-between mt-3">
                   {/* Quantity */}
@@ -93,14 +93,14 @@ export default function CartPage() {
                 <span>Ongkir</span><span>{formatPrice(SHIPPING_FEE)}</span>
               </div>
               <div className="border-t border-gray-100 pt-2 flex justify-between font-bold text-gray-900 text-base">
-                <span>Total</span><span className="text-orange-600">{formatPrice(total)}</span>
+                <span>Total</span><span className="text-green-700">{formatPrice(total)}</span>
               </div>
             </div>
             <Link href="/checkout"
-              className="mt-5 w-full flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 rounded-xl transition-colors">
+              className="mt-5 w-full flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-xl transition-colors">
               Checkout <ArrowRight size={16} />
             </Link>
-            <Link href="/products" className="mt-3 block text-center text-sm text-gray-500 hover:text-orange-500 transition-colors">
+            <Link href="/products" className="mt-3 block text-center text-sm text-gray-500 hover:text-green-600 transition-colors">
               Lanjut belanja
             </Link>
           </div>

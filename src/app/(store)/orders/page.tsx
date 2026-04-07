@@ -25,7 +25,7 @@ export default async function OrdersPage() {
         <div className="text-center py-24 flex flex-col items-center gap-4">
           <Package size={64} className="text-gray-200" />
           <p className="text-gray-500">Belum ada pesanan</p>
-          <Link href="/products" className="px-5 py-2.5 bg-orange-500 text-white rounded-xl text-sm font-semibold hover:bg-orange-600 transition-colors">Mulai Belanja</Link>
+          <Link href="/products" className="px-5 py-2.5 bg-green-600 text-white rounded-xl text-sm font-semibold hover:bg-green-700 transition-colors">Mulai Belanja</Link>
         </div>
       ) : (
         <div className="space-y-4">
@@ -48,7 +48,7 @@ export default async function OrdersPage() {
               </div>
               <div className="flex items-center justify-between pt-3 border-t border-gray-50">
                 <div><p className="text-xs text-gray-400">Total Pembayaran</p><p className="font-bold text-gray-900">{formatPrice(order.total)}</p></div>
-                <Link href={`/orders/${order.id}`} className="flex items-center gap-1.5 text-sm text-orange-500 font-medium hover:text-orange-600">Detail <ArrowRight size={14} /></Link>
+                <Link href={`/orders/${order.id}`} className="flex items-center gap-1.5 text-sm text-green-600 font-medium hover:text-green-700">Detail <ArrowRight size={14} /></Link>
               </div>
             </div>
           ))}

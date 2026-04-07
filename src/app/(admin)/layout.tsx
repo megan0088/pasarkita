@@ -12,8 +12,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <aside className="w-60 shrink-0 bg-gray-900 flex flex-col hidden md:flex">
         <div className="p-5 border-b border-gray-800">
           <Link href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center"><Store size={16} className="text-white" /></div>
-            <div><p className="font-bold text-white text-sm">PasarKita</p><p className="text-xs text-gray-400">Admin Panel</p></div>
+            <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center"><Store size={16} className="text-white" /></div>
+            <div><p className="font-bold text-white text-sm">C9titip</p><p className="text-xs text-gray-400">Admin Panel</p></div>
           </Link>
         </div>
         <nav className="flex-1 p-4 space-y-1">

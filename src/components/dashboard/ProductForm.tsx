@@ -43,9 +43,9 @@ export default function ProductForm({ defaultValues }: Props) {
     const supabase = createClient();
     const ext = file.name.split('.').pop();
     const path = `products/${Date.now()}.${ext}`;
-    const { error } = await supabase.storage.from('pasarkita').upload(path, file);
+    const { error } = await supabase.storage.from('c9titip').upload(path, file);
     if (error) { toast.error('Gagal upload gambar'); return; }
-    const { data: { publicUrl } } = supabase.storage.from('pasarkita').getPublicUrl(path);
+    const { data: { publicUrl } } = supabase.storage.from('c9titip').getPublicUrl(path);
     setForm(f => ({ ...f, image_urls: [...f.image_urls, publicUrl] }));
   }
 
@@ -96,7 +96,7 @@ export default function ProductForm({ defaultValues }: Props) {
             </div>
           ))}
           {form.image_urls.length < 5 && (
-            <label className="w-24 h-24 rounded-xl border-2 border-dashed border-gray-200 hover:border-orange-400 flex flex-col items-center justify-center cursor-pointer text-gray-400 hover:text-orange-500 transition-colors">
+            <label className="w-24 h-24 rounded-xl border-2 border-dashed border-gray-200 hover:border-green-500 flex flex-col items-center justify-center cursor-pointer text-gray-400 hover:text-green-600 transition-colors">
               <Upload size={18} /><span className="text-[10px] mt-1">Upload</span>
               <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
             </label>
@@ -113,18 +113,18 @@ export default function ProductForm({ defaultValues }: Props) {
           <div key={f.name}>
             <label className="block text-xs font-medium text-gray-600 mb-1.5">{f.label}</label>
             <input name={f.name} type={f.type} placeholder={f.placeholder} value={form[f.name as keyof typeof form] as string} onChange={handleChange}
-              className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100 transition-all" />
+              className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100 transition-all" />
           </div>
         ))}
         <div>
           <label className="block text-xs font-medium text-gray-600 mb-1.5">Deskripsi</label>
           <textarea name="description" value={form.description} onChange={handleChange} rows={4}
-            placeholder="Deskripsikan produkmu..." className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100 transition-all resize-none" />
+            placeholder="Deskripsikan produkmu..." className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100 transition-all resize-none" />
         </div>
         <div>
           <label className="block text-xs font-medium text-gray-600 mb-1.5">Kategori</label>
           <select name="category_id" value={form.category_id} onChange={handleChange}
-            className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm outline-none focus:border-orange-400 bg-white">
+            className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm outline-none focus:border-green-500 bg-white">
             <option value="">Pilih kategori</option>
             {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
           </select>
@@ -143,12 +143,12 @@ export default function ProductForm({ defaultValues }: Props) {
             <div key={f.name} className={f.name === 'stock' ? 'col-span-2 sm:col-span-1' : ''}>
               <label className="block text-xs font-medium text-gray-600 mb-1.5">{f.label}</label>
               <input name={f.name} type="number" min="0" placeholder={f.placeholder} value={form[f.name as keyof typeof form] as string} onChange={handleChange}
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100 transition-all" />
+                className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100 transition-all" />
             </div>
           ))}
         </div>
         <label className="flex items-center gap-3 cursor-pointer">
-          <input type="checkbox" name="is_active" checked={form.is_active} onChange={handleChange} className="w-4 h-4 accent-orange-500" />
+          <input type="checkbox" name="is_active" checked={form.is_active} onChange={handleChange} className="w-4 h-4 accent-green-600" />
           <span className="text-sm text-gray-700">Produk aktif (tampil di toko)</span>
         </label>
       </div>
@@ -157,7 +157,7 @@ export default function ProductForm({ defaultValues }: Props) {
         <button type="button" onClick={() => router.back()}
           className="flex-1 py-3 border border-gray-200 text-gray-600 font-semibold rounded-xl hover:bg-gray-50 transition-colors text-sm">Batal</button>
         <button type="submit" disabled={loading}
-          className="flex-1 py-3 bg-orange-500 hover:bg-orange-600 disabled:opacity-60 text-white font-semibold rounded-xl transition-colors text-sm">
+          className="flex-1 py-3 bg-green-600 hover:bg-green-700 disabled:opacity-60 text-white font-semibold rounded-xl transition-colors text-sm">
           {loading ? 'Menyimpan...' : isEdit ? 'Simpan Perubahan' : 'Tambah Produk'}
         </button>
       </div>

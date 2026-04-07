@@ -22,7 +22,7 @@ export default async function AdminDashboardPage() {
   const stats = [
     { label: 'Total User', value: userCount ?? 0, icon: Users, color: 'bg-blue-50 text-blue-600' },
     { label: 'Total Produk', value: productCount ?? 0, icon: Package, color: 'bg-purple-50 text-purple-600' },
-    { label: 'Total Pesanan', value: orderCount ?? 0, icon: ShoppingBag, color: 'bg-orange-50 text-orange-600' },
+    { label: 'Total Pesanan', value: orderCount ?? 0, icon: ShoppingBag, color: 'bg-green-50 text-green-700' },
     { label: 'Revenue', value: formatPrice(totalRevenue), icon: TrendingUp, color: 'bg-green-50 text-green-600' },
   ];
 

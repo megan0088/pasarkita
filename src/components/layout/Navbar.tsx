@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import { ShoppingCart, Search, User, Store, Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import { useCartStore } from '@/stores/cart-store';
-import { cn } from '@/lib/utils';
 
 export default function Navbar() {
   const router = useRouter();
@@ -24,23 +23,23 @@ export default function Navbar() {
         <div className="flex items-center gap-4 h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 shrink-0">
-            <div className="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center">
+            <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center">
               <Store size={18} className="text-white" />
             </div>
-            <span className="font-bold text-lg text-gray-900">PasarKita</span>
+            <span className="font-bold text-lg text-gray-900">C9titip</span>
           </Link>
 
           {/* Search bar */}
           <form onSubmit={handleSearch} className="flex-1 max-w-2xl hidden sm:flex">
-            <div className="flex w-full rounded-xl border border-gray-200 overflow-hidden focus-within:border-orange-400 focus-within:ring-2 focus-within:ring-orange-100 transition-all">
+            <div className="flex w-full rounded-xl border border-gray-200 overflow-hidden focus-within:border-green-500 focus-within:ring-2 focus-within:ring-green-100 transition-all">
               <input
                 value={query}
                 onChange={e => setQuery(e.target.value)}
-                placeholder="Cari produk, toko, atau kategori..."
+                placeholder="Cari barang yang mau kamu beli..."
                 className="flex-1 px-4 py-2.5 text-sm outline-none bg-white"
               />
               <button type="submit"
-                className="px-4 bg-orange-500 hover:bg-orange-600 text-white transition-colors">
+                className="px-4 bg-green-600 hover:bg-green-700 text-white transition-colors">
                 <Search size={16} />
               </button>
             </div>
@@ -51,7 +50,7 @@ export default function Navbar() {
             <Link href="/cart" className="relative p-2 rounded-xl hover:bg-gray-100 transition-colors">
               <ShoppingCart size={22} className="text-gray-700" />
               {totalItems > 0 && (
-                <span className="absolute -top-1 -right-1 w-5 h-5 bg-orange-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                <span className="absolute -top-1 -right-1 w-5 h-5 bg-green-600 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
                   {totalItems > 99 ? '99+' : totalItems}
                 </span>
               )}
@@ -61,10 +60,10 @@ export default function Navbar() {
               <User size={18} />
               <span className="hidden md:inline">Akun</span>
             </Link>
-            <Link href="/dashboard"
-              className="hidden md:flex items-center gap-2 px-3 py-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium transition-colors">
+            <Link href="/dashboard/products/new"
+              className="hidden md:flex items-center gap-2 px-3 py-2 rounded-xl bg-green-600 hover:bg-green-700 text-white text-sm font-medium transition-colors">
               <Store size={16} />
-              Jualan
+              Jual Barang
             </Link>
             <button onClick={() => setMenuOpen(!menuOpen)} className="sm:hidden p-2 rounded-xl hover:bg-gray-100">
               {menuOpen ? <X size={20} /> : <Menu size={20} />}
@@ -74,14 +73,14 @@ export default function Navbar() {
 
         {/* Mobile search */}
         <div className="sm:hidden pb-3">
-          <form onSubmit={handleSearch} className="flex rounded-xl border border-gray-200 overflow-hidden focus-within:border-orange-400">
+          <form onSubmit={handleSearch} className="flex rounded-xl border border-gray-200 overflow-hidden focus-within:border-green-500">
             <input
               value={query}
               onChange={e => setQuery(e.target.value)}
-              placeholder="Cari produk..."
+              placeholder="Cari barang..."
               className="flex-1 px-4 py-2.5 text-sm outline-none"
             />
-            <button type="submit" className="px-4 bg-orange-500 text-white">
+            <button type="submit" className="px-4 bg-green-600 text-white">
               <Search size={16} />
             </button>
           </form>
@@ -95,7 +94,7 @@ export default function Navbar() {
             {['Elektronik','Fashion Pria','Fashion Wanita','Makanan & Minuman','Kesehatan','Olahraga','Rumah & Taman','Hobi & Koleksi'].map(cat => (
               <Link key={cat}
                 href={`/products?category=${encodeURIComponent(cat.toLowerCase().replace(/ & /g,'-').replace(/ /g,'-'))}`}
-                className="whitespace-nowrap hover:text-orange-500 transition-colors py-1">
+                className="whitespace-nowrap hover:text-green-600 transition-colors py-1">
                 {cat}
               </Link>
             ))}

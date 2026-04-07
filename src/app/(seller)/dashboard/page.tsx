@@ -29,7 +29,7 @@ export default async function SellerDashboardPage() {
   const stats = [
     { label: 'Total Produk',  value: productCount ?? 0,          icon: Package,     color: 'bg-blue-50 text-blue-600' },
     { label: 'Total Pesanan', value: orderCount ?? 0,            icon: ShoppingBag, color: 'bg-green-50 text-green-600' },
-    { label: 'Pendapatan',    value: formatPrice(totalRevenue),   icon: TrendingUp,  color: 'bg-orange-50 text-orange-600' },
+    { label: 'Pendapatan',    value: formatPrice(totalRevenue),   icon: TrendingUp,  color: 'bg-green-50 text-green-700' },
   ];
 
   return (
@@ -40,7 +40,7 @@ export default async function SellerDashboardPage() {
           <p className="text-gray-500 text-sm mt-1">Kelola toko dan produkmu</p>
         </div>
         <Link href="/dashboard/products/new"
-          className="flex items-center gap-2 px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-xl text-sm transition-colors">
+          className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-xl text-sm transition-colors">
           <Plus size={16} /> Tambah Produk
         </Link>
       </div>
@@ -65,7 +65,7 @@ export default async function SellerDashboardPage() {
         <div className="bg-white rounded-2xl border border-gray-100 p-5">
           <div className="flex items-center justify-between mb-4">
             <h2 className="font-bold text-gray-900">Pesanan Terbaru</h2>
-            <Link href="/dashboard/orders" className="text-sm text-orange-500 hover:text-orange-600 flex items-center gap-1">
+            <Link href="/dashboard/orders" className="text-sm text-green-600 hover:text-green-700 flex items-center gap-1">
               Lihat semua <ArrowRight size={14} />
             </Link>
           </div>
@@ -95,7 +95,7 @@ export default async function SellerDashboardPage() {
         <div className="bg-white rounded-2xl border border-gray-100 p-5">
           <div className="flex items-center justify-between mb-4">
             <h2 className="font-bold text-gray-900">Produk Terlaris</h2>
-            <Link href="/dashboard/products" className="text-sm text-orange-500 hover:text-orange-600 flex items-center gap-1">
+            <Link href="/dashboard/products" className="text-sm text-green-600 hover:text-green-700 flex items-center gap-1">
               Semua produk <ArrowRight size={14} />
             </Link>
           </div>

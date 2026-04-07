@@ -31,7 +31,7 @@ export default function AddToCartButton({ product }: { product: Product }) {
       <button
         onClick={handle}
         disabled={product.stock === 0 || added}
-        className={`flex items-center justify-center gap-2 w-full py-3.5 rounded-xl font-semibold text-sm transition-all ${added ? 'bg-green-500 text-white' : 'bg-orange-500 hover:bg-orange-600 text-white'} disabled:opacity-50 disabled:cursor-not-allowed`}
+        className={`flex items-center justify-center gap-2 w-full py-3.5 rounded-xl font-semibold text-sm transition-all ${added ? 'bg-green-500 text-white' : 'bg-green-600 hover:bg-green-700 text-white'} disabled:opacity-50 disabled:cursor-not-allowed`}
       >
         {added ? <><Check size={18} /> Ditambahkan!</> : <><ShoppingCart size={18} /> Tambah ke Keranjang</>}
       </button>

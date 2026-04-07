@@ -14,11 +14,11 @@ export default function SellerLayout({ children }: { children: React.ReactNode }
       <aside className="w-60 shrink-0 bg-white border-r border-gray-100 flex flex-col hidden md:flex">
         <div className="p-5 border-b border-gray-100">
           <Link href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center">
+            <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center">
               <Store size={16} className="text-white" />
             </div>
             <div>
-              <p className="font-bold text-gray-900 text-sm">PasarKita</p>
+              <p className="font-bold text-gray-900 text-sm">C9titip</p>
               <p className="text-xs text-gray-400">Seller Dashboard</p>
             </div>
           </Link>
@@ -26,7 +26,7 @@ export default function SellerLayout({ children }: { children: React.ReactNode }
         <nav className="flex-1 p-4 space-y-1">
           {NAV.map(({ href, icon: Icon, label }) => (
             <Link key={href} href={href}
-              className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-600 hover:bg-orange-50 hover:text-orange-600 transition-colors">
+              className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-600 hover:bg-green-50 hover:text-green-700 transition-colors">
               <Icon size={18} /> {label}
             </Link>
           ))}

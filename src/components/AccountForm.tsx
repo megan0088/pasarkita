@@ -40,12 +40,12 @@ export default function AccountForm({ profile }: { profile: Profile }) {
             <label className="block text-sm font-medium text-gray-700 mb-1.5">{f.label}</label>
             <input type={f.type} placeholder={f.placeholder}
               value={form[f.name as keyof typeof form]} onChange={e => setForm(fr => ({ ...fr, [f.name]: e.target.value }))}
-              className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100 transition-all" />
+              className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100 transition-all" />
           </div>
         ))}
         <div className="flex gap-3 pt-2">
           <button type="submit" disabled={loading}
-            className="flex-1 py-3 bg-orange-500 hover:bg-orange-600 disabled:opacity-60 text-white font-semibold rounded-xl transition-colors text-sm">
+            className="flex-1 py-3 bg-green-600 hover:bg-green-700 disabled:opacity-60 text-white font-semibold rounded-xl transition-colors text-sm">
             {loading ? 'Menyimpan...' : 'Simpan'}
           </button>
           <button type="button" onClick={handleSignOut}

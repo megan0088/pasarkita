@@ -6,9 +6,9 @@ import './globals.css';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: { default: 'PasarKita', template: '%s | PasarKita' },
-  description: 'Marketplace lokal Indonesia — temukan produk terbaik dari penjual terpercaya.',
-  keywords: ['marketplace', 'belanja online', 'indonesia', 'jual beli'],
+  title: { default: 'C9titip', template: '%s | C9titip' },
+  description: 'Platform jual beli barang second & titip jual. Upload foto, harga, deskripsi — langsung jual!',
+  keywords: ['jual beli', 'barang second', 'titip jual', 'marketplace', 'indonesia'],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
