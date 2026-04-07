@@ -13,8 +13,20 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="id" className="h-full">
-      <body className={`${inter.className} min-h-full flex flex-col bg-gray-50 text-gray-900 antialiased`}>
+    <html lang="id" className="h-full" suppressHydrationWarning>
+      <head>
+        {/* Prevent flash of wrong theme */}
+        <script dangerouslySetInnerHTML={{ __html: `
+          (function() {
+            var saved = localStorage.getItem('theme');
+            var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (saved === 'dark' || (!saved && prefersDark)) {
+              document.documentElement.classList.add('dark');
+            }
+          })();
+        `}} />
+      </head>
+      <body className={`${inter.className} min-h-full flex flex-col bg-gray-50 dark:bg-[#042f2e] text-gray-900 dark:text-[#f0fdfa]`}>
         {children}
         <Toaster richColors position="top-right" />
       </body>

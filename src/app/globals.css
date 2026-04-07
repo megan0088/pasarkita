@@ -3,7 +3,35 @@
 @layer base {
   * { box-sizing: border-box; }
   html { -webkit-tap-highlight-color: transparent; }
-  body { @apply bg-gray-50 text-gray-900; }
+  body { @apply bg-gray-50 text-gray-900 antialiased; }
+
+  html.dark body {
+    background-color: #042f2e;
+    color: #f0fdfa;
+  }
+}
+
+/* ── Teal Dark CSS Variables ── */
+:root {
+  --bg:        #f9fafb;
+  --surface:   #ffffff;
+  --border:    #e5e7eb;
+  --accent:    #059669;
+  --accent-2:  #047857;
+  --text:      #111827;
+  --text-2:    #6b7280;
+  --text-3:    #9ca3af;
+}
+
+html.dark {
+  --bg:        #042f2e;
+  --surface:   #0d3b38;
+  --border:    #134e4a;
+  --accent:    #2dd4bf;
+  --accent-2:  #14b8a6;
+  --text:      #f0fdfa;
+  --text-2:    #99f6e4;
+  --text-3:    #5eead4;
 }
 
 @layer utilities {
@@ -11,4 +39,14 @@
   .scrollbar-none::-webkit-scrollbar { display: none; }
   .line-clamp-1 { overflow: hidden; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; }
   .line-clamp-2 { overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+
+  /* Teal dark semantic utilities */
+  .bg-app      { background-color: var(--bg); }
+  .bg-surface  { background-color: var(--surface); }
+  .border-app  { border-color: var(--border); }
+  .text-main   { color: var(--text); }
+  .text-sub    { color: var(--text-2); }
+  .text-muted  { color: var(--text-3); }
+  .accent      { color: var(--accent); }
+  .bg-accent   { background-color: var(--accent); }
 }

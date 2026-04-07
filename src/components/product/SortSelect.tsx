@@ -14,15 +14,16 @@ export default function SortSelect({ defaultValue }: { defaultValue?: string }) 
 
   return (
     <div className="flex items-center gap-2">
-      <SlidersHorizontal size={16} className="text-gray-500" />
+      <SlidersHorizontal size={16} className="text-gray-500 dark:text-teal-500" />
       <select
         defaultValue={defaultValue ?? 'newest'}
         onChange={handleChange}
-        className="text-sm border border-gray-200 rounded-xl px-3 py-2 bg-white outline-none focus:border-green-500"
+        className="text-sm border border-gray-200 dark:border-[#134e4a] rounded-xl px-3 py-2
+          bg-white dark:bg-[#0d3b38] text-gray-700 dark:text-teal-200
+          outline-none focus:border-green-500 dark:focus:border-teal-400"
       >
         <option value="newest">Terbaru</option>
         <option value="bestseller">Terlaris</option>
-        <option value="rating">Rating Tertinggi</option>
         <option value="price_asc">Harga Terendah</option>
         <option value="price_desc">Harga Tertinggi</option>
       </select>

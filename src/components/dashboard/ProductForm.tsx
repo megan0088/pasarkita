@@ -83,60 +83,58 @@ export default function ProductForm({ defaultValues }: Props) {
     router.refresh();
   }
 
+  const inputCls = "w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-[#134e4a] text-sm outline-none bg-white dark:bg-[#0a2e2b] text-gray-900 dark:text-[#f0fdfa] placeholder:text-gray-400 dark:placeholder:text-teal-700 focus:border-green-500 dark:focus:border-teal-400 focus:ring-2 focus:ring-green-100 dark:focus:ring-teal-900/40 transition-all";
+  const cardCls  = "bg-white dark:bg-[#0d3b38] rounded-2xl border border-gray-100 dark:border-[#134e4a] p-5";
+  const labelCls = "block text-sm font-semibold text-gray-800 dark:text-[#f0fdfa] mb-3";
+  const subLabelCls = "block text-xs font-medium text-gray-600 dark:text-teal-400 mb-1.5";
+
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Seller name */}
-      <div className="bg-white rounded-2xl border border-gray-100 p-5">
-        <label className="block text-sm font-semibold text-gray-800 mb-3">Nama Penjual</label>
-        <input
-          name="seller_name"
-          type="text"
-          placeholder="Nama kamu (misal: Budi, Toko Andi, dll)"
-          value={form.seller_name}
-          onChange={handleChange}
-          className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100 transition-all"
-        />
-        <p className="text-xs text-gray-400 mt-1.5">Nama ini akan ditampilkan di halaman barang kamu</p>
+      <div className={cardCls}>
+        <label className={labelCls}>Nama Penjual</label>
+        <input name="seller_name" type="text" placeholder="Nama kamu (misal: Budi, Toko Andi, dll)"
+          value={form.seller_name} onChange={handleChange} className={inputCls} />
+        <p className="text-xs text-gray-400 dark:text-teal-600 mt-1.5">Nama ini akan ditampilkan di halaman barang kamu</p>
       </div>
 
       {/* Images */}
-      <div className="bg-white rounded-2xl border border-gray-100 p-5">
-        <label className="block text-sm font-semibold text-gray-800 mb-3">Foto Barang</label>
+      <div className={cardCls}>
+        <label className={labelCls}>Foto Barang</label>
         <div className="flex flex-wrap gap-3">
           {form.image_urls.map((url: string, i: number) => (
-            <div key={i} className="relative w-24 h-24 rounded-xl overflow-hidden border border-gray-200 group">
+            <div key={i} className="relative w-24 h-24 rounded-xl overflow-hidden border border-gray-200 dark:border-[#134e4a] group">
               <img src={url} alt="" className="w-full h-full object-cover" />
               <button type="button" onClick={() => setForm(f => ({ ...f, image_urls: f.image_urls.filter((_: string, j: number) => j !== i) }))}
                 className="absolute top-1 right-1 w-5 h-5 bg-red-500 text-white rounded-full items-center justify-center hidden group-hover:flex"><X size={10} /></button>
             </div>
           ))}
           {form.image_urls.length < 5 && (
-            <label className="w-24 h-24 rounded-xl border-2 border-dashed border-gray-200 hover:border-green-500 flex flex-col items-center justify-center cursor-pointer text-gray-400 hover:text-green-600 transition-colors">
+            <label className="w-24 h-24 rounded-xl border-2 border-dashed border-gray-200 dark:border-[#134e4a] hover:border-green-500 dark:hover:border-teal-400 flex flex-col items-center justify-center cursor-pointer text-gray-400 dark:text-teal-600 hover:text-green-600 dark:hover:text-teal-400 transition-colors">
               <Upload size={18} /><span className="text-[10px] mt-1">Upload</span>
               <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
             </label>
           )}
         </div>
-        <p className="text-xs text-gray-400 mt-2">Maksimal 5 foto</p>
+        <p className="text-xs text-gray-400 dark:text-teal-600 mt-2">Maksimal 5 foto</p>
       </div>
 
       {/* Details */}
-      <div className="bg-white rounded-2xl border border-gray-100 p-5 space-y-4">
-        <label className="block text-sm font-semibold text-gray-800 mb-1">Detail Barang</label>
+      <div className={`${cardCls} space-y-4`}>
+        <label className={labelCls}>Detail Barang</label>
         <div>
-          <label className="block text-xs font-medium text-gray-600 mb-1.5">Nama Barang *</label>
-          <input name="name" type="text" placeholder="Nama barang yang dijual" value={form.name} onChange={handleChange}
-            className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100 transition-all" />
+          <label className={subLabelCls}>Nama Barang *</label>
+          <input name="name" type="text" placeholder="Nama barang yang dijual" value={form.name} onChange={handleChange} className={inputCls} />
         </div>
         <div>
-          <label className="block text-xs font-medium text-gray-600 mb-1.5">Deskripsi</label>
+          <label className={subLabelCls}>Deskripsi</label>
           <textarea name="description" value={form.description} onChange={handleChange} rows={4}
-            placeholder="Ceritakan kondisi barang, kelengkapan, alasan jual, dll..." className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100 transition-all resize-none" />
+            placeholder="Ceritakan kondisi barang, kelengkapan, alasan jual, dll..."
+            className={`${inputCls} resize-none`} />
         </div>
         <div>
-          <label className="block text-xs font-medium text-gray-600 mb-1.5">Kategori</label>
-          <select name="category_id" value={form.category_id} onChange={handleChange}
-            className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm outline-none focus:border-green-500 bg-white">
+          <label className={subLabelCls}>Kategori</label>
+          <select name="category_id" value={form.category_id} onChange={handleChange} className={inputCls}>
             <option value="">Pilih kategori</option>
             {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
           </select>
@@ -144,31 +142,31 @@ export default function ProductForm({ defaultValues }: Props) {
       </div>
 
       {/* Pricing */}
-      <div className="bg-white rounded-2xl border border-gray-100 p-5 space-y-4">
-        <label className="block text-sm font-semibold text-gray-800">Harga</label>
+      <div className={`${cardCls} space-y-4`}>
+        <label className={labelCls}>Harga</label>
         <div className="grid grid-cols-2 gap-4">
           <div className="col-span-2 sm:col-span-1">
-            <label className="block text-xs font-medium text-gray-600 mb-1.5">Harga Jual (Rp) *</label>
-            <input name="price" type="number" min="0" placeholder="50000" value={form.price as string} onChange={handleChange}
-              className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100 transition-all" />
+            <label className={subLabelCls}>Harga Jual (Rp) *</label>
+            <input name="price" type="number" min="0" placeholder="50000" value={form.price as string} onChange={handleChange} className={inputCls} />
           </div>
           <div className="col-span-2 sm:col-span-1">
-            <label className="block text-xs font-medium text-gray-600 mb-1.5">Harga Coret (Rp)</label>
-            <input name="compare_price" type="number" min="0" placeholder="75000 (opsional)" value={form.compare_price as string} onChange={handleChange}
-              className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100 transition-all" />
+            <label className={subLabelCls}>Harga Coret (Rp)</label>
+            <input name="compare_price" type="number" min="0" placeholder="75000 (opsional)" value={form.compare_price as string} onChange={handleChange} className={inputCls} />
           </div>
         </div>
         <label className="flex items-center gap-3 cursor-pointer">
-          <input type="checkbox" name="is_active" checked={form.is_active} onChange={handleChange} className="w-4 h-4 accent-green-600" />
-          <span className="text-sm text-gray-700">Langsung tampilkan barang</span>
+          <input type="checkbox" name="is_active" checked={form.is_active} onChange={handleChange} className="w-4 h-4 accent-green-600 dark:accent-teal-400" />
+          <span className="text-sm text-gray-700 dark:text-teal-300">Langsung tampilkan barang</span>
         </label>
       </div>
 
       <div className="flex gap-3">
         <button type="button" onClick={() => router.back()}
-          className="flex-1 py-3 border border-gray-200 text-gray-600 font-semibold rounded-xl hover:bg-gray-50 transition-colors text-sm">Batal</button>
+          className="flex-1 py-3 border border-gray-200 dark:border-[#134e4a] text-gray-600 dark:text-teal-300 font-semibold rounded-xl hover:bg-gray-50 dark:hover:bg-[#0a2e2b] transition-colors text-sm">
+          Batal
+        </button>
         <button type="submit" disabled={loading}
-          className="flex-1 py-3 bg-green-600 hover:bg-green-700 disabled:opacity-60 text-white font-semibold rounded-xl transition-colors text-sm">
+          className="flex-1 py-3 bg-green-600 dark:bg-teal-600 hover:bg-green-700 dark:hover:bg-teal-500 disabled:opacity-60 text-white font-semibold rounded-xl transition-colors text-sm">
           {loading ? 'Mengupload...' : isEdit ? 'Simpan Perubahan' : 'Upload Barang'}
         </button>
       </div>
