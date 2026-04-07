@@ -2,13 +2,11 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ShoppingCart, Search, User, Store, Menu, X } from 'lucide-react';
+import { Search, Store, Menu, X, Tag } from 'lucide-react';
 import { useState } from 'react';
-import { useCartStore } from '@/stores/cart-store';
 
 export default function Navbar() {
   const router = useRouter();
-  const totalItems = useCartStore(s => s.totalItems());
   const [query, setQuery] = useState('');
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -35,35 +33,25 @@ export default function Navbar() {
               <input
                 value={query}
                 onChange={e => setQuery(e.target.value)}
-                placeholder="Cari barang yang mau kamu beli..."
+                placeholder="Cari barang..."
                 className="flex-1 px-4 py-2.5 text-sm outline-none bg-white"
               />
-              <button type="submit"
-                className="px-4 bg-green-600 hover:bg-green-700 text-white transition-colors">
+              <button type="submit" className="px-4 bg-green-600 hover:bg-green-700 text-white transition-colors">
                 <Search size={16} />
               </button>
             </div>
           </form>
 
-          {/* Right actions */}
+          {/* Right */}
           <div className="flex items-center gap-2 ml-auto">
-            <Link href="/cart" className="relative p-2 rounded-xl hover:bg-gray-100 transition-colors">
-              <ShoppingCart size={22} className="text-gray-700" />
-              {totalItems > 0 && (
-                <span className="absolute -top-1 -right-1 w-5 h-5 bg-green-600 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
-                  {totalItems > 99 ? '99+' : totalItems}
-                </span>
-              )}
-            </Link>
-            <Link href="/account"
-              className="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-gray-100 transition-colors text-sm font-medium text-gray-700">
-              <User size={18} />
-              <span className="hidden md:inline">Akun</span>
+            <Link href="/products"
+              className="hidden sm:flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-gray-100 transition-colors text-sm font-medium text-gray-700">
+              Lihat Barang
             </Link>
             <Link href="/dashboard/products/new"
-              className="hidden md:flex items-center gap-2 px-3 py-2 rounded-xl bg-green-600 hover:bg-green-700 text-white text-sm font-medium transition-colors">
-              <Store size={16} />
-              Jual Barang
+              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-green-600 hover:bg-green-700 text-white text-sm font-semibold transition-colors">
+              <Tag size={15} />
+              <span>Jual Barang</span>
             </Link>
             <button onClick={() => setMenuOpen(!menuOpen)} className="sm:hidden p-2 rounded-xl hover:bg-gray-100">
               {menuOpen ? <X size={20} /> : <Menu size={20} />}

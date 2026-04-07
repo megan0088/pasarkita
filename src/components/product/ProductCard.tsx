@@ -1,27 +1,13 @@
-'use client';
-
 import Link from 'next/link';
 import Image from 'next/image';
-import { ShoppingCart, Star } from 'lucide-react';
-import { toast } from 'sonner';
+import { ShoppingCart } from 'lucide-react';
 import type { Product } from '@/types';
-import { formatPrice, formatNumber, getDiscountPercent } from '@/lib/utils';
-import { useCartStore } from '@/stores/cart-store';
+import { formatPrice, getDiscountPercent } from '@/lib/utils';
 
 export default function ProductCard({ product }: { product: Product }) {
-  const addItem = useCartStore(s => s.addItem);
   const discount = product.compare_price
     ? getDiscountPercent(product.price, product.compare_price)
     : null;
-
-  function handleAddToCart(e: React.MouseEvent) {
-    e.preventDefault();
-    addItem(product);
-    toast.success('Ditambahkan ke keranjang', {
-      description: product.name,
-      duration: 2000,
-    });
-  }
 
   return (
     <Link href={`/products/${product.slug}`} className="group block">
@@ -54,32 +40,19 @@ export default function ProductCard({ product }: { product: Product }) {
 
         {/* Info */}
         <div className="p-3">
-          <p className="text-sm text-gray-800 line-clamp-2 leading-snug mb-2 font-medium">
+          <p className="text-sm text-gray-800 line-clamp-2 leading-snug mb-1 font-medium">
             {product.name}
           </p>
-
-          <div className="mb-2">
-            <p className="text-base font-bold text-gray-900">{formatPrice(product.price)}</p>
-            {product.compare_price && (
-              <p className="text-xs text-gray-400 line-through">{formatPrice(product.compare_price)}</p>
-            )}
-          </div>
-
           {product.seller_name && (
-            <p className="text-xs text-gray-400 mb-1.5 truncate">{product.seller_name}</p>
+            <p className="text-xs text-gray-400 mb-2 truncate">{product.seller_name}</p>
           )}
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-1 text-xs text-gray-500">
-              <Star size={11} className="text-yellow-400 fill-yellow-400" />
-              <span>{product.rating_avg || '0'}</span>
+            <div>
+              <p className="text-base font-bold text-gray-900">{formatPrice(product.price)}</p>
+              {product.compare_price && (
+                <p className="text-xs text-gray-400 line-through">{formatPrice(product.compare_price)}</p>
+              )}
             </div>
-            <button
-              onClick={handleAddToCart}
-              disabled={product.stock === 0}
-              className="p-1.5 rounded-lg bg-green-50 hover:bg-green-600 hover:text-white text-green-600 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-            >
-              <ShoppingCart size={14} />
-            </button>
           </div>
         </div>
       </div>
