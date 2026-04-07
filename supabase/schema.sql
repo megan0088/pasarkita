@@ -1,8 +1,8 @@
 -- ============================================================
--- PasarKita — Supabase Schema
+-- C9titip — Supabase Schema
 -- ============================================================
 
--- ── Profiles ───────────────────────────���─────────────────────
+-- ── Profiles ─────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS profiles (
   id          UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
   email       TEXT NOT NULL DEFAULT '',
@@ -42,12 +42,13 @@ CREATE TABLE IF NOT EXISTS products (
   name          TEXT NOT NULL,
   slug          TEXT NOT NULL UNIQUE,
   description   TEXT NOT NULL DEFAULT '',
-  price         BIGINT NOT NULL CHECK (price >= 0),       -- in IDR
-  compare_price BIGINT CHECK (compare_price > price),     -- original price for discount
-  stock         INTEGER NOT NULL DEFAULT 0 CHECK (stock >= 0),
+  price         BIGINT NOT NULL CHECK (price >= 0),
+  compare_price BIGINT CHECK (compare_price > price),
+  stock         INTEGER NOT NULL DEFAULT 1 CHECK (stock >= 0),
   image_urls    TEXT[] DEFAULT '{}',
   category_id   UUID REFERENCES categories(id) ON DELETE SET NULL,
-  seller_id     UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+  seller_id     UUID REFERENCES profiles(id) ON DELETE CASCADE,  -- nullable, no auth needed
+  seller_name   TEXT NOT NULL DEFAULT '',                         -- nama penjual tanpa auth
   is_active     BOOLEAN DEFAULT TRUE,
   rating_avg    NUMERIC(2,1) DEFAULT 0,
   rating_count  INTEGER DEFAULT 0,
@@ -63,7 +64,9 @@ CREATE INDEX IF NOT EXISTS idx_products_active   ON products(is_active);
 CREATE TABLE IF NOT EXISTS orders (
   id                        UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   order_number              TEXT NOT NULL UNIQUE,
-  buyer_id                  UUID NOT NULL REFERENCES profiles(id),
+  buyer_id                  UUID REFERENCES profiles(id),  -- nullable for guest checkout
+  buyer_name                TEXT NOT NULL DEFAULT '',
+  buyer_email               TEXT NOT NULL DEFAULT '',
   status                    TEXT NOT NULL DEFAULT 'pending'
                               CHECK (status IN ('pending','paid','processing','shipped','delivered','cancelled')),
   subtotal                  BIGINT NOT NULL,
@@ -92,12 +95,11 @@ CREATE TABLE IF NOT EXISTS order_items (
 CREATE TABLE IF NOT EXISTS reviews (
   id          UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   product_id  UUID NOT NULL REFERENCES products(id) ON DELETE CASCADE,
-  buyer_id    UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+  buyer_id    UUID REFERENCES profiles(id) ON DELETE CASCADE,
   order_id    UUID NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
   rating      INTEGER NOT NULL CHECK (rating BETWEEN 1 AND 5),
   comment     TEXT,
-  created_at  TIMESTAMPTZ DEFAULT NOW(),
-  UNIQUE (product_id, buyer_id, order_id)
+  created_at  TIMESTAMPTZ DEFAULT NOW()
 );
 
 -- ── Auto-update rating after review ──────────────────────────
@@ -136,7 +138,7 @@ CREATE TRIGGER on_order_paid
   AFTER UPDATE ON orders
   FOR EACH ROW EXECUTE FUNCTION update_stock_on_paid();
 
--- ── updated_at trigger ────────────────────────��───────────────
+-- ── updated_at trigger ────────────────────────────────────────
 CREATE OR REPLACE FUNCTION set_updated_at()
 RETURNS TRIGGER LANGUAGE plpgsql AS $$
 BEGIN NEW.updated_at = NOW(); RETURN NEW; END;
@@ -145,7 +147,7 @@ CREATE TRIGGER products_updated_at BEFORE UPDATE ON products FOR EACH ROW EXECUT
 CREATE TRIGGER orders_updated_at   BEFORE UPDATE ON orders   FOR EACH ROW EXECUTE FUNCTION set_updated_at();
 
 -- ── Storage ──────────────────────────────────────────────────
-INSERT INTO storage.buckets (id, name, public) VALUES ('pasarkita', 'pasarkita', true) ON CONFLICT DO NOTHING;
+INSERT INTO storage.buckets (id, name, public) VALUES ('c9titip', 'c9titip', true) ON CONFLICT DO NOTHING;
 
 -- ── RLS ──────────────────────────────────────────────────────
 ALTER TABLE profiles    ENABLE ROW LEVEL SECURITY;
@@ -165,40 +167,37 @@ CREATE POLICY "Admin manage categories" ON categories FOR ALL USING (
   EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin')
 );
 
--- Products
-CREATE POLICY "Public active products"   ON products FOR SELECT USING (is_active = true OR seller_id = auth.uid());
-CREATE POLICY "Sellers manage products"  ON products FOR ALL USING (
-  auth.uid() = seller_id OR
-  EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin')
-);
+-- Products — anyone can list and view, no auth needed
+CREATE POLICY "Public read products"   ON products FOR SELECT USING (is_active = true);
+CREATE POLICY "Anyone can list items"  ON products FOR INSERT WITH CHECK (true);
+CREATE POLICY "Anyone can update own"  ON products FOR UPDATE USING (true);
 
--- Orders
-CREATE POLICY "Buyers see own orders"    ON orders FOR SELECT USING (buyer_id = auth.uid());
-CREATE POLICY "Sellers see their orders" ON orders FOR SELECT USING (
-  EXISTS (SELECT 1 FROM order_items oi JOIN products p ON oi.product_id = p.id WHERE oi.order_id = orders.id AND p.seller_id = auth.uid())
+-- Orders — public can create orders
+CREATE POLICY "Anyone can create orders"  ON orders FOR INSERT WITH CHECK (true);
+CREATE POLICY "Buyers see own orders"     ON orders FOR SELECT USING (
+  buyer_id = auth.uid() OR buyer_id IS NULL
 );
-CREATE POLICY "Admin see all orders"     ON orders FOR SELECT USING (
+CREATE POLICY "Admin see all orders"      ON orders FOR SELECT USING (
   EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin')
 );
-CREATE POLICY "Buyers create orders"     ON orders FOR INSERT WITH CHECK (auth.uid() = buyer_id);
-CREATE POLICY "Buyers cancel own order"  ON orders FOR UPDATE USING (auth.uid() = buyer_id);
+CREATE POLICY "Anyone can update order"   ON orders FOR UPDATE USING (true);
 
 -- Order items
-CREATE POLICY "Order items visible to order owners" ON order_items FOR SELECT USING (
+CREATE POLICY "Order items visible to buyer" ON order_items FOR SELECT USING (
   EXISTS (SELECT 1 FROM orders WHERE id = order_items.order_id AND buyer_id = auth.uid())
 );
-CREATE POLICY "System insert order items" ON order_items FOR INSERT WITH CHECK (true);
+CREATE POLICY "Anyone insert order items" ON order_items FOR INSERT WITH CHECK (true);
 
 -- Reviews
 CREATE POLICY "Public reviews"         ON reviews FOR SELECT USING (true);
-CREATE POLICY "Buyers create reviews"  ON reviews FOR INSERT WITH CHECK (auth.uid() = buyer_id);
+CREATE POLICY "Anyone create reviews"  ON reviews FOR INSERT WITH CHECK (true);
 
--- Storage
-CREATE POLICY "Public read"   ON storage.objects FOR SELECT USING (bucket_id = 'pasarkita');
-CREATE POLICY "Auth upload"   ON storage.objects FOR INSERT WITH CHECK (bucket_id = 'pasarkita' AND auth.role() = 'authenticated');
-CREATE POLICY "Auth delete"   ON storage.objects FOR DELETE USING (bucket_id = 'pasarkita' AND auth.role() = 'authenticated');
+-- Storage — public read and write
+CREATE POLICY "Public read"    ON storage.objects FOR SELECT USING (bucket_id = 'c9titip');
+CREATE POLICY "Public upload"  ON storage.objects FOR INSERT WITH CHECK (bucket_id = 'c9titip');
+CREATE POLICY "Public delete"  ON storage.objects FOR DELETE USING (bucket_id = 'c9titip');
 
--- ── Seed Categories ──────────────────────────────────��────────
+-- ── Seed Categories ──────────────────────────────────────────
 INSERT INTO categories (name, slug, sort_order) VALUES
   ('Elektronik',       'elektronik',     0),
   ('Fashion Pria',     'fashion-pria',   1),

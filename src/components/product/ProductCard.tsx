@@ -65,12 +65,13 @@ export default function ProductCard({ product }: { product: Product }) {
             )}
           </div>
 
+          {product.seller_name && (
+            <p className="text-xs text-gray-400 mb-1.5 truncate">{product.seller_name}</p>
+          )}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-1 text-xs text-gray-500">
               <Star size={11} className="text-yellow-400 fill-yellow-400" />
               <span>{product.rating_avg || '0'}</span>
-              <span>·</span>
-              <span>Terjual {formatNumber(product.sold_count)}</span>
             </div>
             <button
               onClick={handleAddToCart}

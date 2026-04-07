@@ -15,11 +15,12 @@ export default function ProductForm({ defaultValues }: Props) {
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
   const [form, setForm] = useState({
+    seller_name: defaultValues?.seller_name ?? '',
     name: defaultValues?.name ?? '',
     description: defaultValues?.description ?? '',
     price: defaultValues?.price ?? '',
     compare_price: defaultValues?.compare_price ?? '',
-    stock: defaultValues?.stock ?? '',
+    stock: defaultValues?.stock ?? 1,
     category_id: defaultValues?.category_id ?? '',
     is_active: defaultValues?.is_active ?? true,
     image_urls: defaultValues?.image_urls ?? [],
@@ -51,42 +52,56 @@ export default function ProductForm({ defaultValues }: Props) {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!form.name || !form.price || !form.stock) { toast.error('Lengkapi field wajib'); return; }
+    if (!form.seller_name.trim()) { toast.error('Masukkan nama kamu'); return; }
+    if (!form.name || !form.price) { toast.error('Lengkapi nama barang dan harga'); return; }
     setLoading(true);
     const supabase = createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) { router.push('/login'); return; }
 
     const slug = slugify(form.name, { lower: true, strict: true }) + '-' + Date.now().toString(36);
     const payload = {
+      seller_name: form.seller_name.trim(),
       name: form.name,
-      slug: isEdit ? defaultValues.slug : slug,
+      slug: isEdit ? defaultValues!.slug : slug,
       description: form.description,
       price: Number(form.price),
       compare_price: form.compare_price ? Number(form.compare_price) : null,
-      stock: Number(form.stock),
+      stock: Number(form.stock) || 1,
       category_id: form.category_id || null,
       is_active: form.is_active,
       image_urls: form.image_urls,
-      seller_id: user.id,
+      seller_id: null,
     };
 
     const { error } = isEdit
-      ? await supabase.from('products').update(payload).eq('id', defaultValues.id)
+      ? await supabase.from('products').update(payload).eq('id', defaultValues!.id)
       : await supabase.from('products').insert(payload);
 
     setLoading(false);
     if (error) { toast.error(error.message); return; }
-    toast.success(isEdit ? 'Produk berhasil diperbarui!' : 'Produk berhasil ditambahkan!');
-    router.push('/dashboard/products');
+    toast.success(isEdit ? 'Barang berhasil diperbarui!' : 'Barang berhasil diupload!');
+    router.push('/products');
     router.refresh();
   }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
+      {/* Seller name */}
+      <div className="bg-white rounded-2xl border border-gray-100 p-5">
+        <label className="block text-sm font-semibold text-gray-800 mb-3">Nama Penjual</label>
+        <input
+          name="seller_name"
+          type="text"
+          placeholder="Nama kamu (misal: Budi, Toko Andi, dll)"
+          value={form.seller_name}
+          onChange={handleChange}
+          className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100 transition-all"
+        />
+        <p className="text-xs text-gray-400 mt-1.5">Nama ini akan ditampilkan di halaman barang kamu</p>
+      </div>
+
       {/* Images */}
       <div className="bg-white rounded-2xl border border-gray-100 p-5">
-        <label className="block text-sm font-semibold text-gray-800 mb-3">Foto Produk</label>
+        <label className="block text-sm font-semibold text-gray-800 mb-3">Foto Barang</label>
         <div className="flex flex-wrap gap-3">
           {form.image_urls.map((url: string, i: number) => (
             <div key={i} className="relative w-24 h-24 rounded-xl overflow-hidden border border-gray-200 group">
@@ -102,24 +117,21 @@ export default function ProductForm({ defaultValues }: Props) {
             </label>
           )}
         </div>
+        <p className="text-xs text-gray-400 mt-2">Maksimal 5 foto</p>
       </div>
 
       {/* Details */}
       <div className="bg-white rounded-2xl border border-gray-100 p-5 space-y-4">
-        <label className="block text-sm font-semibold text-gray-800 mb-1">Detail Produk</label>
-        {[
-          { name: 'name', label: 'Nama Produk *', type: 'text', placeholder: 'Nama produk kamu' },
-        ].map(f => (
-          <div key={f.name}>
-            <label className="block text-xs font-medium text-gray-600 mb-1.5">{f.label}</label>
-            <input name={f.name} type={f.type} placeholder={f.placeholder} value={form[f.name as keyof typeof form] as string} onChange={handleChange}
-              className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100 transition-all" />
-          </div>
-        ))}
+        <label className="block text-sm font-semibold text-gray-800 mb-1">Detail Barang</label>
+        <div>
+          <label className="block text-xs font-medium text-gray-600 mb-1.5">Nama Barang *</label>
+          <input name="name" type="text" placeholder="Nama barang yang dijual" value={form.name} onChange={handleChange}
+            className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100 transition-all" />
+        </div>
         <div>
           <label className="block text-xs font-medium text-gray-600 mb-1.5">Deskripsi</label>
           <textarea name="description" value={form.description} onChange={handleChange} rows={4}
-            placeholder="Deskripsikan produkmu..." className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100 transition-all resize-none" />
+            placeholder="Ceritakan kondisi barang, kelengkapan, alasan jual, dll..." className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100 transition-all resize-none" />
         </div>
         <div>
           <label className="block text-xs font-medium text-gray-600 mb-1.5">Kategori</label>
@@ -133,23 +145,22 @@ export default function ProductForm({ defaultValues }: Props) {
 
       {/* Pricing */}
       <div className="bg-white rounded-2xl border border-gray-100 p-5 space-y-4">
-        <label className="block text-sm font-semibold text-gray-800">Harga & Stok</label>
+        <label className="block text-sm font-semibold text-gray-800">Harga</label>
         <div className="grid grid-cols-2 gap-4">
-          {[
-            { name: 'price', label: 'Harga Jual (Rp) *', placeholder: '50000' },
-            { name: 'compare_price', label: 'Harga Coret (Rp)', placeholder: '75000' },
-            { name: 'stock', label: 'Stok *', placeholder: '100' },
-          ].map(f => (
-            <div key={f.name} className={f.name === 'stock' ? 'col-span-2 sm:col-span-1' : ''}>
-              <label className="block text-xs font-medium text-gray-600 mb-1.5">{f.label}</label>
-              <input name={f.name} type="number" min="0" placeholder={f.placeholder} value={form[f.name as keyof typeof form] as string} onChange={handleChange}
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100 transition-all" />
-            </div>
-          ))}
+          <div className="col-span-2 sm:col-span-1">
+            <label className="block text-xs font-medium text-gray-600 mb-1.5">Harga Jual (Rp) *</label>
+            <input name="price" type="number" min="0" placeholder="50000" value={form.price as string} onChange={handleChange}
+              className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100 transition-all" />
+          </div>
+          <div className="col-span-2 sm:col-span-1">
+            <label className="block text-xs font-medium text-gray-600 mb-1.5">Harga Coret (Rp)</label>
+            <input name="compare_price" type="number" min="0" placeholder="75000 (opsional)" value={form.compare_price as string} onChange={handleChange}
+              className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100 transition-all" />
+          </div>
         </div>
         <label className="flex items-center gap-3 cursor-pointer">
           <input type="checkbox" name="is_active" checked={form.is_active} onChange={handleChange} className="w-4 h-4 accent-green-600" />
-          <span className="text-sm text-gray-700">Produk aktif (tampil di toko)</span>
+          <span className="text-sm text-gray-700">Langsung tampilkan barang</span>
         </label>
       </div>
 
@@ -158,7 +169,7 @@ export default function ProductForm({ defaultValues }: Props) {
           className="flex-1 py-3 border border-gray-200 text-gray-600 font-semibold rounded-xl hover:bg-gray-50 transition-colors text-sm">Batal</button>
         <button type="submit" disabled={loading}
           className="flex-1 py-3 bg-green-600 hover:bg-green-700 disabled:opacity-60 text-white font-semibold rounded-xl transition-colors text-sm">
-          {loading ? 'Menyimpan...' : isEdit ? 'Simpan Perubahan' : 'Tambah Produk'}
+          {loading ? 'Mengupload...' : isEdit ? 'Simpan Perubahan' : 'Upload Barang'}
         </button>
       </div>
     </form>

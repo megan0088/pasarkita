@@ -87,10 +87,10 @@ export default async function ProductDetailPage({ params }: Props) {
               <div key={text} className="flex items-center gap-2 text-sm text-gray-500"><Icon size={15} className="text-green-500" /> {text}</div>
             ))}
           </div>
-          {product.seller && (
+          {product.seller_name && (
             <div className="mt-6 p-4 bg-white rounded-2xl border border-gray-100 flex items-center gap-3">
-              <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center text-green-700 font-bold text-sm">{product.seller.full_name?.[0]?.toUpperCase() ?? 'S'}</div>
-              <div><p className="font-semibold text-gray-800 text-sm">{product.seller.full_name}</p><p className="text-xs text-gray-400">Seller</p></div>
+              <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center text-green-700 font-bold text-sm">{product.seller_name[0]?.toUpperCase() ?? 'S'}</div>
+              <div><p className="font-semibold text-gray-800 text-sm">{product.seller_name}</p><p className="text-xs text-gray-400">Penjual</p></div>
             </div>
           )}
         </div>

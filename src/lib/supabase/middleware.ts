@@ -21,13 +21,7 @@ export async function updateSession(request: NextRequest) {
     }
   );
 
-  const { data: { user } } = await supabase.auth.getUser();
-
-  // Protect seller & admin routes
-  const path = request.nextUrl.pathname;
-  if (!user && (path.startsWith('/dashboard') || path.startsWith('/admin'))) {
-    return NextResponse.redirect(new URL('/login', request.url));
-  }
+  await supabase.auth.getUser();
 
   return supabaseResponse;
 }

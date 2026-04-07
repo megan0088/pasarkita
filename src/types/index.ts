@@ -29,7 +29,8 @@ export interface Product {
   image_urls: string[];
   category_id: string;
   category?: Category;
-  seller_id: string;
+  seller_id: string | null;
+  seller_name: string;
   seller?: Profile;
   is_active: boolean;
   rating_avg: number;
